@@ -5,8 +5,12 @@ import numpy as np
 from deepface import DeepFace
 
 # 絵文字画像の読み込み
-emoji_path = "/content/drive/MyDrive/face_stamp_app/emoji.png"
-emoji = Image.open(emoji_path)
+emoji_path = "emoji.png"
+try:
+    emoji = Image.open(emoji_path)
+    st.write("Emoji loaded successfully.")
+except Exception as e:
+    st.error(f"Error loading emoji: {e}")
 
 # 画像の読み込み
 def load_image(image_file):
