@@ -60,3 +60,8 @@ if image_file is not None:
         st.image(result_image, caption="スタンプを適用した画像", use_column_width=True)
     else:
         st.write("顔が検出されませんでした。")
+
+# Streamlitアプリケーションの実行部分
+if __name__ == "__main__":
+    st.set_page_config(page_title="顔認識スタンプアプリ")
+    st.write("Streamlitアプリケーションを実行しています")
