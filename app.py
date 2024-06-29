@@ -1,9 +1,8 @@
 import streamlit as st
 import cv2
-import face_recognition
 from PIL import Image
 import numpy as np
-
+from deepface import DeepFace
 
 # 絵文字画像の読み込み
 emoji_path = "/content/drive/MyDrive/face_stamp_app/emoji.png"
