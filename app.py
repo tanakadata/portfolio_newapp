@@ -8,18 +8,25 @@ import numpy as np
 # 絵文字画像の読み込み
 emoji_path = "/content/drive/MyDrive/face_stamp_app/emoji.png"
 emoji = Image.open(emoji_path)
+
 # 画像の読み込み
 def load_image(image_file):
-  img = Image.open(image_file)
-  # 画像が8ビットのグレースケールまたはRGB形式かどうかを確認し、必要に応じて変換
-  if img.mode != 'RGB':
-      img = img.convert('RGB')
-  return img
+    img = Image.open(image_file)
+    # 画像が8ビットのグレースケールまたはRGB形式かどうかを確認し、必要に応じて変換
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    return img
+
 # 画像内の顔の位置検出
 def detect_faces(image):
-  image_np = np.array(image)
-  face_locations = face_recognition.face_locations(image_np)
-  return face_locations
+    image_np = np.array(image)
+    results = DeepFace.detectFace(image_np, detector_backend='opencv', enforce_detection=False)
+    face_locations = []
+    for result in results:
+        x, y, w, h = result['region']['x'], result['region']['y'], result['region']['w'], result['region']['h']
+        face_locations.append((y, x+w, y+h, x))
+    return face_locations
+
 # 検出した顔に絵文字を重ねる
 def apply_emoji(image, face_locations, emoji):
     image_np = np.array(image)
@@ -29,6 +36,7 @@ def apply_emoji(image, face_locations, emoji):
         for c in range(0, 3):
             image_np[top:bottom, left:right, c] = emoji_np[:, :, c] * (emoji_np[:, :, 3] / 255.0) + image_np[top:bottom, left:right, c] * (1.0 - emoji_np[:, :, 3] / 255.0)
     return Image.fromarray(image_np)
+
 # UI
 st.title("顔認識スタンプアプリ")
 st.write("画像をアップロードするか、カメラで写真を撮影してください。")
